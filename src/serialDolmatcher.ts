@@ -381,16 +381,12 @@ export default class SerialDolmatcher extends EventEmitter {
       return;
     }
 
-    if (!address && this.settings.get(SettingsKey.autoConnect)) {
-      let r = await this.getAutoconnectAddress();
-      if (r !== null) {
-        this.board.setAddress(r);
-        address = r;
-      }
-    } else {
-      if (address) {
-        this.board.setAddress(address);
-      }
+    if (!address) {
+        address = await this.getAutoconnectAddress() as string;
+    }
+
+    if (address) {
+      this.board.setAddress(address);
     }
 
     // stop config observer from triggering again
